@@ -29,6 +29,13 @@ function App() {
     }
   };
 
+  // Volver al menú principal
+  const goBack = () => {
+    setIsCreatingRoom(null); // Restablecer el estado al menú principal
+    setRoomId(''); // Limpiar el código de sala
+    setShowChat(false); // Ocultar el chat
+  };
+
   // Escuchar mensajes entrantes
   useEffect(() => {
     socket.on('receive-message', (message: string) => {
@@ -60,42 +67,29 @@ function App() {
       {/* Menú de opciones (crear o unirse a una sala) */}
       {!showChat && isCreatingRoom === null && (
         <div>
-          <button onClick={() => setIsCreatingRoom(true)}>Crear sala</button>
+          <button onClick={createRoom}>Crear sala</button>
           <button onClick={() => setIsCreatingRoom(false)}>Unirse a sala</button>
         </div>
       )}
 
-      {/* Formulario para crear o unirse a una sala */}
-      {!showChat && isCreatingRoom !== null && (
+      {/* Formulario para unirse a una sala */}
+      {!showChat && isCreatingRoom === false && (
         <div>
-          {isCreatingRoom ? (
-            <div>
-              <button onClick={createRoom}>Crear sala</button>
-            </div>
-          ) : (
-            <div>
-              <input
-                type="text"
-                placeholder="Código de sala"
-                value={roomId}
-                onChange={(e) => setRoomId(e.target.value)}
-              />
-              <button onClick={joinRoom}>Unirse a sala</button>
-            </div>
-          )}
+          <input
+            type="text"
+            placeholder="Código de sala"
+            value={roomId}
+            onChange={(e) => setRoomId(e.target.value)}
+          />
+          <button onClick={joinRoom}>Unirse a sala</button>
+          <button onClick={goBack}>Volver atrás</button>
         </div>
       )}
 
-      {/* Mostrar el código de la sala al crear una */}
-      {isCreatingRoom && roomId && (
-        <div>
-          <p>Sala creada con éxito! Código: {roomId}</p>
-        </div>
-      )}
-
-      {/* Chat */}
+      {/* Mostrar el código de la sala y el chat */}
       {showChat && (
         <div>
+          <p>Sala creada con éxito! Código: {roomId}</p>
           <h2>Mensajes:</h2>
           {messages.map((msg, index) => (
             <div key={index}>{msg}</div>
@@ -109,6 +103,7 @@ function App() {
             />
             <button onClick={sendMessage}>Enviar</button>
           </div>
+          <button onClick={goBack}>Volver atrás</button>
         </div>
       )}
     </div>
