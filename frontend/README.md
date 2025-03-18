@@ -1,54 +1,47 @@
-# React + TypeScript + Vite
+# Frontend del Proyecto de Chat en Tiempo Real
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este es el frontend de una aplicación de chat en tiempo real. Permite a los usuarios crear salas, unirse a salas existentes y enviar mensajes en tiempo real.
 
-Currently, two official plugins are available:
+## Tecnologías utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React**: Biblioteca para construir interfaces de usuario.
+- **TypeScript**: Lenguaje que añade tipos estáticos a JavaScript.
+- **Socket.IO Client**: Librería para manejar conexiones en tiempo real con el backend.
+- **Vite**: Herramienta de construcción rápida para proyectos modernos.
 
-## Expanding the ESLint configuration
+## Estructura del proyecto
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+frontend/
+├── src/
+│   ├── assets/         # Directorio de recursos del proyecto
+│   ├── App.tsx         # Componente principal de la aplicación
+│   ├── main.tsx        # Punto de entrada de la aplicación
+├── package.json        # Dependencias y scripts del proyecto
+├── vite.config.ts      # Configuración de Vite
+├── .gitignore          # Archivos y carpetas ignorados por Git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Instalación y ejecución
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/Browfire/F1ND_TH3_NUM8ER.git
+   ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+2. Navega a la carpeta del frontend:
+   ```bash
+   cd frontend
+   ```
+
+3. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+
+4. Inicia la aplicación:
+   ```bash
+   npm run dev
+   ```
+
+   La aplicación estará disponible en `http://localhost:5173`.
