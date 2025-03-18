@@ -27,8 +27,18 @@ const rooms = new Map();
 // Ruta para crear una sala
 app.get('/create-room', (req, res) => {
     const roomId = nanoid(6); // Genera un código de 6 caracteres
-    rooms.set(roomId, { messages: [] }); // Crea una nueva sala
+    rooms.set(roomId, { messages: [], users: 0 }); // Crea una nueva sala con contador de usuarios
     res.json({ roomId });
+});
+
+// Ruta para verificar si una sala existe
+app.get('/check-room/:roomId', (req, res) => {
+    const roomId = req.params.roomId;
+    if (rooms.has(roomId)) {
+        res.json({ exists: true });
+    } else {
+        res.json({ exists: false });
+    }
 });
 
 // Configurar Socket.IO
@@ -40,6 +50,7 @@ io.on('connection', (socket) => {
         socket.join(roomId);
         const room = rooms.get(roomId);
         if (room) {
+            room.users += 1; // Incrementar el contador de usuarios
             // Enviar historial de mensajes al usuario que se une
             socket.emit('chat-history', room.messages);
         }
@@ -54,9 +65,22 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Salir de la sala
+    socket.on('leave-room', (roomId) => {
+        const room = rooms.get(roomId);
+        if (room) {
+            room.users -= 1; // Decrementar el contador de usuarios
+            if (room.users === 0) {
+                rooms.delete(roomId); // Eliminar la sala si no hay usuarios
+                console.log(`Sala ${roomId} eliminada porque no tiene usuarios.`);
+            }
+        }
+    });
+
     // Manejar la desconexión
     socket.on('disconnect', () => {
         console.log('Un usuario se ha desconectado:', socket.id);
+        // Aquí puedes agregar lógica para manejar la desconexión de salas si es necesario
     });
 });
 

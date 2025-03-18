@@ -21,11 +21,17 @@ function App() {
   };
 
   // Unirse a una sala existente
-  const joinRoom = () => {
+  const joinRoom = async () => {
     if (roomId) {
-      socket.emit('join-room', roomId); // Unirse a la sala
-      setIsCreatingRoom(false); // Ocultar el menú de opciones
-      setShowChat(true); // Mostrar el chat
+      const response = await fetch(`http://localhost:3000/check-room/${roomId}`);
+      const data = await response.json();
+      if (data.exists) {
+        socket.emit('join-room', roomId); // Unirse a la sala
+        setIsCreatingRoom(false); // Ocultar el menú de opciones
+        setShowChat(true); // Mostrar el chat
+      } else {
+        alert('La sala no existe. Por favor, verifica el código.');
+      }
     }
   };
 
@@ -34,6 +40,8 @@ function App() {
     setIsCreatingRoom(null); // Restablecer el estado al menú principal
     setRoomId(''); // Limpiar el código de sala
     setShowChat(false); // Ocultar el chat
+    setMessages([]); // Limpiar los mensajes
+    socket.emit('leave-room', roomId); // Notificar al backend que el usuario ha salido de la sala
   };
 
   // Escuchar mensajes entrantes
@@ -103,7 +111,7 @@ function App() {
             />
             <button onClick={sendMessage}>Enviar</button>
           </div>
-          <button onClick={goBack}>Volver atrás</button>
+          <button onClick={goBack}>Salir de la sala</button>
         </div>
       )}
     </div>
